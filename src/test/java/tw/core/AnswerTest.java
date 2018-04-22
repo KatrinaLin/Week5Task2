@@ -2,11 +2,13 @@ package tw.core;
 
 import org.junit.Before;
 import org.junit.Test;
+import tw.core.model.Record;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * 在AnswerTest文件中完成Answer中对应的单元测试
@@ -31,5 +33,25 @@ public class AnswerTest {
     public void toStringTest() {
         assertEquals(answer.toString(), "1 2 3 4");
     }
+
+
+    @Test
+    public void checkTest1() {
+        Answer userAnswer = new Answer();
+        userAnswer.setNumList(Arrays.asList("2", "6", "3", "8"));
+        Record record = answer.check(userAnswer);   // 1A1B
+
+        assertTrue(record.getValue()[0] == 1 && record.getValue()[1] == 1);
+    }
+
+    @Test
+    public void checkTest2() {
+        Answer userAnswer = new Answer();
+        userAnswer.setNumList(Arrays.asList("5", "6", "7", "8"));
+        Record record = answer.check(userAnswer);   // 0A0B
+
+        assertTrue(record.getValue()[0] == 0 && record.getValue()[1] == 0);
+    }
+
 
 }
