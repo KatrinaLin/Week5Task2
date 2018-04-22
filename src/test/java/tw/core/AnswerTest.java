@@ -2,6 +2,7 @@ package tw.core;
 
 import org.junit.Before;
 import org.junit.Test;
+import tw.core.exception.OutOfRangeAnswerException;
 import tw.core.model.Record;
 
 import java.util.Arrays;
@@ -53,5 +54,16 @@ public class AnswerTest {
         assertTrue(record.getValue()[0] == 0 && record.getValue()[1] == 0);
     }
 
+    @Test
+    public void validateTest() {
+        Answer userAnswer = new Answer();
+        userAnswer.setNumList(Arrays.asList("10", "6", "7", "8"));
 
+        try {
+            userAnswer.validate();
+        } catch (Exception e) {
+            assertTrue(e instanceof OutOfRangeAnswerException);
+            assertEquals(e.getMessage(), "Answer format is incorrect");
+        }
+    }
 }
