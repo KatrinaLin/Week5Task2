@@ -1,7 +1,9 @@
 package tw.core;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import tw.core.exception.OutOfRangeAnswerException;
 import tw.core.model.Record;
 
@@ -26,18 +28,17 @@ public class AnswerTest {
     }
 
     @Test
-    public void getIndexOfNumTest() {
+    public void should_return_index_of_number() {
         assertEquals(answer.getIndexOfNum("3"), 2);
     }
 
     @Test
-    public void toStringTest() {
+    public void should_return_formatted_string() {
         assertEquals(answer.toString(), "1 2 3 4");
     }
 
-
     @Test
-    public void checkTest1() {
+    public void should_return_1A1B() {
         Answer userAnswer = new Answer();
         userAnswer.setNumList(Arrays.asList("2", "6", "3", "8"));
         Record record = answer.check(userAnswer);   // 1A1B
@@ -46,7 +47,7 @@ public class AnswerTest {
     }
 
     @Test
-    public void checkTest2() {
+    public void should_return_0A0B() {
         Answer userAnswer = new Answer();
         userAnswer.setNumList(Arrays.asList("5", "6", "7", "8"));
         Record record = answer.check(userAnswer);   // 0A0B
@@ -54,16 +55,38 @@ public class AnswerTest {
         assertTrue(record.getValue()[0] == 0 && record.getValue()[1] == 0);
     }
 
-    @Test
-    public void validateTest() {
+    @Test(expected = OutOfRangeAnswerException.class)
+    public void should_throw_exception_when_input_is_invalid() throws OutOfRangeAnswerException{
         Answer userAnswer = new Answer();
         userAnswer.setNumList(Arrays.asList("10", "6", "7", "8"));
 
-        try {
-            userAnswer.validate();
-        } catch (Exception e) {
-            assertTrue(e instanceof OutOfRangeAnswerException);
-            assertEquals(e.getMessage(), "Answer format is incorrect");
-        }
+        userAnswer.validate();
     }
+
+    // Another way to test for exception
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
+
+    @Test
+    public void should_throws_Exception() throws OutOfRangeAnswerException {
+        expectedEx.expect(OutOfRangeAnswerException.class);
+        expectedEx.expectMessage("Answer format is incorrect");
+
+        Answer userAnswer = new Answer();
+        userAnswer.setNumList(Arrays.asList("10", "6", "7", "8"));
+
+        userAnswer.validate();
+    }
+
+    // TODO: learn how to write unit test for such method
+    @Test
+    public void should_create_answer_with_input_string() {
+        Answer ans = Answer.createAnswer("1 2 3 4");
+
+        assertEquals(0, ans.getIndexOfNum("1"));
+        assertEquals(1, ans.getIndexOfNum("2"));
+        assertEquals(2, ans.getIndexOfNum("3"));
+        assertEquals(3, ans.getIndexOfNum("4"));
+    }
+
 }
