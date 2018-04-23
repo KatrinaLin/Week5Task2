@@ -35,14 +35,9 @@ public class GameControllerTest {
     }
 
     @Test
-    public void should_print_begin_game() {
-        try {
-            gameController.beginGame();
-            assertEquals("------Guess Number Game, You have 6 chances to guess!  ------", systemOut());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void should_print_begin_game() throws IOException {
+        gameController.beginGame();
+        assertEquals("------Guess Number Game, You have 6 chances to guess!  ------", systemOut());
     }
-
 
 }
